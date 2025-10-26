@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "github.akirahane.ysmsoundexpansion.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+  ],
+  "client": [
+    "SoundEngineMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
