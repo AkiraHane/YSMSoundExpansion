@@ -57,14 +57,17 @@ public class PlaySoundHandler {
 
     // 提取出处理和判断逻辑
     public static SoundEvent onEntityPlaySound(SoundEvent sound, Entity entity, SoundSource source, float volume, float pitch) {
-        if (sound == null) return null;
+        if (sound == null) {
+            LOGGER.debug("[YSMSOUND] 播放声音失败: {}", sound);
+            return null;
+        }
         UUID id = entity.getUUID();
 
         // 取得声音 ID
         ResourceLocation soundRes = sound.getLocation();
 
         // 如果是 YSM 声音, 给这个实体绑定模型
-        LOGGER.debug("[YSMSOUND] 声音空间: {}", soundRes.getNamespace());
+        LOGGER.debug("[YSMSOUND] 声音id: {}:{}", soundRes.getNamespace(), soundRes.getPath());
         if ("ysmsoundexpansion".equals(soundRes.getNamespace())) {
             String path = soundRes.getPath();
             String modelId = path.contains(".") ? path.substring(0, path.indexOf('.')) : path;
@@ -142,6 +145,7 @@ public class PlaySoundHandler {
 
         List<SoundEvent> targetSounds = new ArrayList<>();
         for (YSMSoundConfigModel soundConfig : soundConfigs) {
+            LOGGER.debug("[YSMSOUND] 检查条件: {} 个", soundConfig.targets().size());
             targetSounds.addAll(soundConfig.checkConditions(
                     blockId, blockTags, mainHandItemId, weather, time, dimensionId, health, air, food, xpLevel
             ));

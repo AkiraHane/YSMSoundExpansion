@@ -77,9 +77,9 @@ public class YSMSoundResourceLoader {
                 PlaySoundHandler.addSoundConfig(
                         modelId,
                         new YSMSoundConfigModel(
-                                obj.getAsJsonArray("conditions"),
+                                obj.getAsJsonArray("target"),
                                 obj.getAsJsonArray("replace_patterns"),
-                                obj.get("default_sound")
+                                obj.get("default_sound_id")
                         )
                 );
             }

@@ -1,4 +1,4 @@
-package github.akirahane.ysmsoundexpansion.client.mixin;
+package github.akirahane.ysmsoundexpansion.mixin;
 
 import com.mojang.logging.LogUtils;
 import github.akirahane.ysmsoundexpansion.client.event.PlaySoundHandler;
@@ -7,6 +7,7 @@ import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -62,10 +63,11 @@ public class SoundEngineMixin {
         if (e instanceof Player || (e != null && e.getType().toString().contains("maid"))) {
             printSoundInfo(p_120313_);
             SoundEvent soundEvent = PlaySoundHandler.onEntityPlaySound(
-                    BuiltInRegistries.SOUND_EVENT.get(p_120313_.getLocation()),
-                    e, p_120313_.getSource(), p_120313_.getVolume(), p_120313_.getPitch()
+                    SoundEvent.createVariableRangeEvent(ResourceLocation.parse(p_120313_.getLocation().toString())),
+                    e, p_120313_.getSource(), 1.0f, 1.0f
             );
             if (soundEvent == null) {
+                LOGGER.info("取消播放 {}", p_120313_.getLocation());
                 ci.cancel();
                 return;
             }
