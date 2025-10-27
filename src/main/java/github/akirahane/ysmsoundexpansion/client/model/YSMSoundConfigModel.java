@@ -49,7 +49,7 @@ public record YSMSoundConfigModel(List<Target> targets, List<Pattern> replacePat
             Integer food,
             Integer xpLevel
     ) {
-        return targets.stream()
+        List<SoundEvent> result = targets.stream()
                 .filter(target -> target.getSound() != null &&
                         target.checkConditions(
                                 blockId, blockTags, mainHandItemId, weather, time, dimensionId, health, air, food, xpLevel
@@ -57,5 +57,12 @@ public record YSMSoundConfigModel(List<Target> targets, List<Pattern> replacePat
                 )
                 .map(Target::getSound)
                 .collect(Collectors.toList());
+
+        // 如果没有匹配项，则返回默认声音
+        if (result.isEmpty() && defaultSound != null) {
+            result.add(defaultSound);
+        }
+
+        return result;
     }
 }
