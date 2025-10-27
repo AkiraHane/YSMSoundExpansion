@@ -63,7 +63,7 @@ public class YSMSoundResourceLoader {
         String[] path = loc.getPath().split("/", 3);
         String modelId = path[1];
         String fileName = path[2].replace(".json", "");
-        if ("banSoundPatterns".equals(fileName)) {
+        if ("ban_sound_patterns".equals(fileName)) {
             PlaySoundHandler.addBlockPatterns(
                     modelId,
                     json.asList().stream()
