@@ -6,7 +6,6 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -67,7 +66,7 @@ public class SoundEngineMixin {
                     e, p_120313_.getSource(), 1.0f, 1.0f
             );
             if (soundEvent == null) {
-                LOGGER.info("取消播放 {}", p_120313_.getLocation());
+                LOGGER.debug("取消播放 {}", p_120313_.getLocation());
                 ci.cancel();
                 return;
             }
@@ -75,13 +74,13 @@ public class SoundEngineMixin {
     }
 
     private static void printSoundInfo(SoundInstance sound) {
-        LOGGER.info("----- {} -----", sound.getClass().getName());
-        LOGGER.info("ID: {}", sound.getLocation());
-        LOGGER.info("Pos: ({}, {}, {})%n", sound.getX(), sound.getY(), sound.getZ());
-        LOGGER.info("Source: {}", sound.getSource());
+        LOGGER.debug("----- {} -----", sound.getClass().getName());
+        LOGGER.debug("ID: {}", sound.getLocation());
+        LOGGER.debug("Pos: ({}, {}, {})%n", sound.getX(), sound.getY(), sound.getZ());
+        LOGGER.debug("Source: {}", sound.getSource());
 
         if (sound instanceof TickableSoundInstance tsi) {
-            LOGGER.info("Tickable: stopped={}", tsi.isStopped());
+            LOGGER.debug("Tickable: stopped={}", tsi.isStopped());
         }
 
         // 反射打印自定义信息
@@ -91,13 +90,13 @@ public class SoundEngineMixin {
                 Object val = f.get(sound);
                 if (val == null) continue;
                 if (val instanceof Entity e)
-                    LOGGER.info("⚙️ 可能的实体: {} ({})", e.getName().getString(), e.getType().toShortString());
+                    LOGGER.debug("⚙️ 可能的实体: {} ({})", e.getName().getString(), e.getType().toShortString());
                 else if (val instanceof BlockPos pos)
-                    LOGGER.info("\uD83E\uDDF1 可能的方块位置: {}", pos);
+                    LOGGER.debug("\uD83E\uDDF1 可能的方块位置: {}", pos);
                 else if (val instanceof Level l)
-                    LOGGER.info("\uD83C\uDF0D 所在维度: {}", l.dimension().location());
+                    LOGGER.debug("\uD83C\uDF0D 所在维度: {}", l.dimension().location());
                 else if (val instanceof String s)
-                    LOGGER.info("\uD83D\uDCAC 字符串字段: {}={}", f.getName(), s);
+                    LOGGER.debug("\uD83D\uDCAC 字符串字段: {}={}", f.getName(), s);
             } catch (Exception ignored) {
             }
         }

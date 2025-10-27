@@ -41,7 +41,7 @@ public class YSMSoundResourceLoader {
         PlaySoundHandler.clearModelSoundIdToSoundConfigCache();
         // 拿到 assets/modid/sounds/*/ 下的 config.json 和 banSoundPatterns.json 文件
         Map<ResourceLocation, Resource> resources = resourceManager.listResources(ROOT_PATH,
-                loc -> loc.getPath().endsWith("config.json") || loc.getPath().endsWith("banSoundPatterns.json")
+                loc -> loc.getPath().endsWith("config.json") || loc.getPath().endsWith("ban_sound_patterns.json")
         );
 
         int count = 0;
