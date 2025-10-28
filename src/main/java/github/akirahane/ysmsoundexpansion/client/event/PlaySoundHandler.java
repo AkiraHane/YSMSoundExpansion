@@ -6,6 +6,7 @@ import github.akirahane.ysmsoundexpansion.client.common.EntityModelTracker;
 import github.akirahane.ysmsoundexpansion.client.common.YSMSoundInstance;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSound;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSoundConfigModel;
+import github.akirahane.ysmsoundexpansion.utils.SoundTypeUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -161,8 +162,8 @@ public class PlaySoundHandler {
         for (YSMSoundConfigModel soundConfig : soundConfigs) {
             LOGGER.debug("[YSMSOUND] 检查条件: {} 个", soundConfig.targets().size());
             YSMSound targetSound = soundConfig.checkConditions(
-                    blockId, blockTags, soundType.toString().toUpperCase(Locale.ROOT), mainHandItemId, weather, canSeeSky, inWater, time,
-                    dimensionId, health, air, food, xpLevel
+                    blockId, blockTags, SoundTypeUtil.getName(soundType).toUpperCase(Locale.ROOT), mainHandItemId,
+                    weather, canSeeSky, inWater, time, dimensionId, health, air, food, xpLevel
             );
             if (targetSound == null) {
                 continue;
