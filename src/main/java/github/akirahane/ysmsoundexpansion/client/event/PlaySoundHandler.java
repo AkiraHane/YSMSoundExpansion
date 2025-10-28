@@ -4,6 +4,9 @@ import com.mojang.logging.LogUtils;
 import github.akirahane.ysmsoundexpansion.YSMSoundExpansion;
 import github.akirahane.ysmsoundexpansion.client.common.EntityModelTracker;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSoundConfigModel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -164,8 +167,15 @@ public class PlaySoundHandler {
         }
         LOGGER.debug("[YSMSOUND] 替换声音: {} -> {}", soundId, targetSounds);
         for (SoundEvent soundEvent : targetSounds) {
-            level.playLocalSound(
-                    entity, soundEvent, source, volume, pitch
+            Minecraft.getInstance().getSoundManager().play(
+                new EntityBoundSoundInstance(
+                        soundEvent,
+                        source,
+                        volume,
+                        pitch,
+                        entity,
+                        entity.getId() * 31L + System.currentTimeMillis()
+                )
             );
         }
         return null;
