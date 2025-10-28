@@ -16,7 +16,7 @@ public record YSMSoundConfigModel(List<Target> targets, List<Pattern> replacePat
                 targets != null && !targets.isJsonNull() ? targets.asList().stream()
                         .map(JsonElement::getAsJsonObject)
                         .filter(target -> target.has("replace_sound"))
-                        .map(item -> new Target(item, defaultSound))
+                        .map(Target::new)
                         .collect(Collectors.toList())
                         : Collections.emptyList(),
                 replacePatterns != null && !replacePatterns.isJsonNull() ? replacePatterns.asList().stream()

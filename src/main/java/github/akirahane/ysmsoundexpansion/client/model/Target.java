@@ -11,14 +11,12 @@ import java.util.List;
 public record Target(YSMSound sound, Conditions conditions) {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Target(JsonObject jsonObject, YSMSound defaultSound) {
+    public Target(JsonObject jsonObject) {
         this(
                 new YSMSound(
                         jsonObject.get("replace_sound") != null && !jsonObject.get("replace_sound").isJsonNull()
                                 ? jsonObject.get("replace_sound").getAsJsonObject()
-                                : null,
-                        defaultSound != null ? defaultSound.volume() : 1.0f,
-                        defaultSound != null ? defaultSound.pitch() : 1.0f
+                                : null
                 ),
                 jsonObject.get("conditions") != null ? new Conditions(jsonObject.get("conditions").getAsJsonObject()) : null
         );

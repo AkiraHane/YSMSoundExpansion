@@ -168,7 +168,7 @@ public class PlaySoundHandler {
                 continue;
             }
             // 判断soundRes.getPath()最后一部分是不是step
-            if (targetSound.sound() == null && soundRes.getPath().endsWith(".step")) {
+            if (targetSound.sound() == null && soundId.endsWith(".step")) {
                 targetSound = new YSMSound(
                         soundType.getStepSound(),
                         targetSound.volume(),

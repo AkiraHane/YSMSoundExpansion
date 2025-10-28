@@ -81,7 +81,7 @@ public class YSMSoundResourceLoader {
                                 obj.getAsJsonArray("target"),
                                 obj.getAsJsonArray("replace_patterns"),
                                 obj.get("default_sound") != null && !obj.get("default_sound").isJsonNull()
-                                        ? new YSMSound(obj.get("default_sound").getAsJsonObject(), 1.0f, 1.0f)
+                                        ? new YSMSound(obj.get("default_sound").getAsJsonObject())
                                         : null
                         )
                 );
