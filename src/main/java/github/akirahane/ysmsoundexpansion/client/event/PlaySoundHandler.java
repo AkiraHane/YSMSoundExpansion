@@ -208,10 +208,6 @@ public class PlaySoundHandler {
         modelIdToBlockPatterns.put(modelId, patterns);
     }
 
-    public static void clearBlockPatterns(String modelId) {
-        modelIdToBlockPatterns.remove(modelId);
-    }
-
     public static void clearBlockPatterns() {
         modelIdToBlockPatterns.clear();
     }
@@ -222,10 +218,6 @@ public class PlaySoundHandler {
         } else {
             modelIdToSoundConfig.put(modelId, new ArrayList<>(List.of(soundConfig)));
         }
-    }
-
-    public static void clearSoundConfig(String modelId) {
-        modelIdToSoundConfig.remove(modelId);
     }
 
     public static void clearSoundConfig() {

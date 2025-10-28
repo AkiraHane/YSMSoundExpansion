@@ -3,9 +3,6 @@ package github.akirahane.ysmsoundexpansion.client.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 
 import java.util.Collections;
 import java.util.List;
