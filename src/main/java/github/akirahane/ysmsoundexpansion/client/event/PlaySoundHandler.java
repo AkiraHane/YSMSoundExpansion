@@ -188,7 +188,8 @@ public class PlaySoundHandler {
             LOGGER.debug("[YSMSOUND] 忽略声音: {}", soundId);
             return sound;
         }
-        LOGGER.debug("[YSMSOUND] 替换声音: {} -> {}", soundId, targetSounds);
+        // 拼合声音字符串
+        LOGGER.debug("[YSMSOUND] 替换声音: {} -> {}", soundId, targetSounds.stream().map(ysmSound -> ysmSound.sound().getLocation().toString()).collect(Collectors.joining(",")));
         for (YSMSound soundItem : targetSounds) {
             Minecraft.getInstance().getSoundManager().play(
                     new YSMSoundInstance(
