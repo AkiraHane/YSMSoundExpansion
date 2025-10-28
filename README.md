@@ -131,22 +131,24 @@ assets/
 
 ##### 字段说明：
 
-| 字段 | 说明 |
-|------|------|
-| `replace_patterns` | 正则数组，匹配需被替换的原始音效 ID |
-| `conditions` | 所有条件必须全部满足才生效 |
-| &nbsp;&nbsp;`block_id` | 脚下方块的 ID（正则） |
-| &nbsp;&nbsp;`block_tag` | 脚下方块的标签（正则） |
-| &nbsp;&nbsp;`block_type` | 方块音效类型（如 `WOOD`, `GRASS`, `STONE` 等，见 `SoundType` 枚举） |
-| &nbsp;&nbsp;`item_id` | 手持物品 ID（正则） |
-| &nbsp;&nbsp;`weathers` | 天气限制（`clear`, `rain`, `thunder`） |
-| &nbsp;&nbsp;`times` | 时间范围（以游戏刻为单位，0~24000） |
-| &nbsp;&nbsp;`dimensions` | 维度名称正则（如 `minecraft:the_nether`） |
-| &nbsp;&nbsp;`entity.health/hunger/air/xp_level` | 实体属性数值区间 |
-| `replace_sound.sound` | 替代音效 ID（可跨模组） |
-| `replace_sound.volume` | 音量（0.0 ~ 1.0） |
-| `replace_sound.pitch` | 音调（1.0 为基准） |
-| `default_sound` | 所有 `target` 条件都不满足时的兜底音效 |
+| 字段                                              | 说明                                                    |
+|-------------------------------------------------|-------------------------------------------------------|
+| `replace_patterns`                              | 正则数组，匹配需被替换的原始音效 ID                                   |
+| `conditions`                                    | 所有条件必须全部满足才生效                                         |
+| &nbsp;&nbsp;`block_id`                          | 脚下方块的 ID（正则）                                          |
+| &nbsp;&nbsp;`block_tag`                         | 脚下方块的标签（正则）                                           |
+| &nbsp;&nbsp;`block_type`                        | 方块音效类型（如 `WOOD`, `GRASS`, `STONE` 等，见 `SoundType` 枚举） |
+| &nbsp;&nbsp;`item_id`                           | 手持物品 ID（正则）                                           |
+| &nbsp;&nbsp;`weathers`                          | 天气限制（`clear`, `rain`, `thunder`）                      |
+| &nbsp;&nbsp;`can_see_sky`                       | 上方是否可见天空（`true`, `false`）                             |
+| &nbsp;&nbsp;`in_water`                          | 是否需要在水里（`true`, `false`）                              |
+| &nbsp;&nbsp;`times`                             | 时间范围（以游戏刻为单位，0~24000）                                 |
+| &nbsp;&nbsp;`dimensions`                        | 维度名称正则（如 `minecraft:the_nether`）                      |
+| &nbsp;&nbsp;`entity.health/hunger/air/xp_level` | 实体属性数值区间                                              |
+| `replace_sound.sound`                           | 替代音效 ID（可跨模组）                                         |
+| `replace_sound.volume`                          | 音量（0.0 ~ 1.0）                                         |
+| `replace_sound.pitch`                           | 音调（1.0 为基准）                                           |
+| `default_sound`                                 | 所有 `target` 条件都不满足时的兜底音效                              |
 
 > ⚠️ 若 `replace_sound.sound` 为空，且原音效以 `.step` 结尾，则自动播放对应材质的默认脚步声。
 
@@ -188,24 +190,14 @@ assets/
 
 ## 🌱 未来展望
 
-我们希望 YSM 官方能逐步开放以下接口以增强社区生态：
+希望 YSM 能逐步开放接口，一些会用到的优化点：
 
 1. ✅ 提供 **当前玩家使用的模型 ID** 查询接口；
 2. ✅ 发送 **模型切换事件**，便于实时更新状态；
-3. ✅ 允许访问 **Molang 解析器**，获取模型变量（如是否奔跑、受伤等）；
-4. ✅ 支持从外部触发 **动画事件（Animation Event）** —— 这将极大拓展互动可能性！
+3. ✅ 允许访问 **Molang 解析器**，获取模型变量；
+4. ✅ 支持从外部触发 **动画事件** ！
 
 > 若以上功能得以实现，YSMSoundExpansion 将能进一步做到「动作驱动音效」、「状态感知响应」等高级功能。
-
----
-
-## 🤝 贡献与反馈
-
-欢迎提交 Issue 或 Pull Request！  
-如果你是模型制作者，也欢迎分享你的音效配置案例，我们将收录至示例库。
-
-GitHub: `https://github.com/yourname/YSMSoundExpansion`  
-Modrinth: `https://modrinth.com/project/ysmsoundexpansion`
 
 ---
 

@@ -146,6 +146,8 @@ public class PlaySoundHandler {
         } else {
             weather = "clear";
         }
+        boolean canSeeSky = level.canSeeSkyFromBelowWater(pos);
+        boolean inWater = entity.isInWater();
         int time = Math.toIntExact(level.getDayTime() % 24000L);
         String dimensionId = level.dimension().location().toString();
         LivingEntity living = entity instanceof LivingEntity ? (LivingEntity) entity : null;
@@ -159,7 +161,7 @@ public class PlaySoundHandler {
         for (YSMSoundConfigModel soundConfig : soundConfigs) {
             LOGGER.debug("[YSMSOUND] 检查条件: {} 个", soundConfig.targets().size());
             YSMSound targetSound = soundConfig.checkConditions(
-                    blockId, blockTags, soundType.toString().toUpperCase(Locale.ROOT), mainHandItemId, weather, time,
+                    blockId, blockTags, soundType.toString().toUpperCase(Locale.ROOT), mainHandItemId, weather, canSeeSky, inWater, time,
                     dimensionId, health, air, food, xpLevel
             );
             if (targetSound == null) {

@@ -34,6 +34,8 @@ public record Target(YSMSound sound, Conditions conditions) {
             String blockType,
             String mainHandItemId,
             String weather,
+            boolean canSeeSky,
+            boolean inWater,
             int time,
             String dimensionId,
             int health,
@@ -65,6 +67,14 @@ public record Target(YSMSound sound, Conditions conditions) {
         // 判断天气
         if (!ObjectUtils.isEmpty(conditions.weathers()) && !conditions.weathers().contains(weather)) {
             LOGGER.info("[YSMSOUND_TARGET] 不替换声音: weather: {}", weather);
+            return false;
+        }
+        if (!ObjectUtils.isEmpty(conditions.canSeeSky()) && conditions.canSeeSky() != canSeeSky) {
+            LOGGER.info("[YSMSOUND_TARGET] 不替换声音: canSeeSky: {}", canSeeSky);
+            return false;
+        }
+        if (!ObjectUtils.isEmpty(conditions.inWater()) && conditions.inWater() != inWater) {
+            LOGGER.info("[YSMSOUND_TARGET] 不替换声音: inWater: {}", inWater);
             return false;
         }
         // 判断时间

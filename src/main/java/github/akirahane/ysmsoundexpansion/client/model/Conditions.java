@@ -14,6 +14,8 @@ public record Conditions(
         Pattern blockType,
         Pattern itemId,
         List<String> weathers,
+        Boolean canSeeSky,
+        Boolean inWater,
         List<IntegerRange> times,
         Pattern dimensions,
         EntityConditions entity
@@ -26,6 +28,8 @@ public record Conditions(
                 jsonObject.get("item_id") != null ? Pattern.compile(jsonObject.get("item_id").getAsString()) : null,
                 jsonObject.get("weathers") != null ? jsonObject.get("weathers").getAsJsonArray().asList()
                         .stream().map(JsonElement::getAsString).collect(Collectors.toList()) : null,
+                jsonObject.get("can_see_sky") != null ? jsonObject.get("can_see_sky").getAsBoolean() : null,
+                jsonObject.get("in_water") != null ? jsonObject.get("in_water").getAsBoolean() : null,
                 jsonObject.get("times") != null ? jsonObject.get("times").getAsJsonArray().asList()
                         .stream().map(
                                 jsonElement -> new IntegerRange(jsonElement.getAsJsonObject())
