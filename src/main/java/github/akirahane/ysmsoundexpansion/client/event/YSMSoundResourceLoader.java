@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import github.akirahane.ysmsoundexpansion.YSMSoundExpansion;
+import github.akirahane.ysmsoundexpansion.client.model.YSMSound;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSoundConfigModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -79,7 +80,9 @@ public class YSMSoundResourceLoader {
                         new YSMSoundConfigModel(
                                 obj.getAsJsonArray("target"),
                                 obj.getAsJsonArray("replace_patterns"),
-                                obj.get("default_sound_id")
+                                obj.get("default_sound") != null && !obj.get("default_sound").isJsonNull()
+                                        ? new YSMSound(obj.get("default_sound").getAsJsonObject(), 1.0f, 1.0f)
+                                        : null
                         )
                 );
             }

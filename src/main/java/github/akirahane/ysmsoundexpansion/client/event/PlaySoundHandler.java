@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import github.akirahane.ysmsoundexpansion.YSMSoundExpansion;
 import github.akirahane.ysmsoundexpansion.client.common.EntityModelTracker;
 import github.akirahane.ysmsoundexpansion.client.common.YSMSoundInstance;
+import github.akirahane.ysmsoundexpansion.client.model.YSMSound;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSoundConfigModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.Sound;
@@ -155,7 +156,7 @@ public class PlaySoundHandler {
         Integer food = player != null ? player.getFoodData().getFoodLevel() : null;
         Integer xpLevel = player != null ? player.experienceLevel : null;
 
-        List<SoundEvent> targetSounds = new ArrayList<>();
+        List<YSMSound> targetSounds = new ArrayList<>();
         for (YSMSoundConfigModel soundConfig : soundConfigs) {
             LOGGER.debug("[YSMSOUND] 检查条件: {} 个", soundConfig.targets().size());
             targetSounds.addAll(soundConfig.checkConditions(
@@ -168,25 +169,13 @@ public class PlaySoundHandler {
             return sound;
         }
         LOGGER.debug("[YSMSOUND] 替换声音: {} -> {}", soundId, targetSounds);
-
-        // 获取对应的 WeighedSoundEvents
-        WeighedSoundEvents events;
-        Sound sound_item;
-        for (SoundEvent soundEvent : targetSounds) {
-            events = Minecraft.getInstance().getSoundManager().getSoundEvent(
-                    soundEvent.getLocation()
-            );
-            sound_item = !ObjectUtils.isEmpty(events) ? events.getSound(RandomSource.create()) : null;
+        for (YSMSound soundItem : targetSounds) {
             Minecraft.getInstance().getSoundManager().play(
                     new YSMSoundInstance(
-                            soundEvent,
+                            soundItem.sound(),
                             source,
-                            ObjectUtils.isEmpty(sound_item)
-                                    ? volume
-                                    : sound_item.getVolume().sample(RandomSource.create()) * volume,
-                            ObjectUtils.isEmpty(sound_item)
-                                    ? pitch
-                                    : sound_item.getPitch().sample(RandomSource.create()) * pitch,
+                            volume * soundItem.volume(),
+                            pitch * soundItem.pitch(),
                             entity,
                             entity.getId() * 31L + System.currentTimeMillis()
                     )

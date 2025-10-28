@@ -1,6 +1,7 @@
 package github.akirahane.ysmsoundexpansion.client.model;
 
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,17 +12,17 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public record Target(SoundEvent sound, Conditions conditions) {
+public record Target(YSMSound sound, Conditions conditions) {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Target(JsonObject jsonObject) {
+    public Target(JsonObject jsonObject, YSMSound defaultSound) {
         this(
-                SoundEvent.createVariableRangeEvent(ResourceLocation.parse(jsonObject.get("replace_sound_id").getAsString())),
+                new YSMSound(jsonObject.get("replace_sound").getAsJsonObject(), defaultSound.volume(), defaultSound.pitch()),
                 jsonObject.get("conditions") != null ? new Conditions(jsonObject.get("conditions").getAsJsonObject()) : null
         );
     }
 
-    public SoundEvent getSound() {
+    public YSMSound getSound() {
         return sound;
     }
 
