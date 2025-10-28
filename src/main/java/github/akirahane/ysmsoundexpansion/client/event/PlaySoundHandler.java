@@ -6,12 +6,15 @@ import github.akirahane.ysmsoundexpansion.client.common.EntityModelTracker;
 import github.akirahane.ysmsoundexpansion.client.common.YSMSoundInstance;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSoundConfigModel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.Sound;
+import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -165,16 +168,28 @@ public class PlaySoundHandler {
             return sound;
         }
         LOGGER.debug("[YSMSOUND] 替换声音: {} -> {}", soundId, targetSounds);
+
+        // 获取对应的 WeighedSoundEvents
+        WeighedSoundEvents events;
+        Sound sound_item;
         for (SoundEvent soundEvent : targetSounds) {
+            events = Minecraft.getInstance().getSoundManager().getSoundEvent(
+                    soundEvent.getLocation()
+            );
+            sound_item = !ObjectUtils.isEmpty(events) ? events.getSound(RandomSource.create()) : null;
             Minecraft.getInstance().getSoundManager().play(
-                new YSMSoundInstance(
-                        soundEvent,
-                        source,
-                        volume,
-                        pitch,
-                        entity,
-                        entity.getId() * 31L + System.currentTimeMillis()
-                )
+                    new YSMSoundInstance(
+                            soundEvent,
+                            source,
+                            ObjectUtils.isEmpty(sound_item)
+                                    ? volume
+                                    : sound_item.getVolume().sample(RandomSource.create()) * volume,
+                            ObjectUtils.isEmpty(sound_item)
+                                    ? pitch
+                                    : sound_item.getPitch().sample(RandomSource.create()) * pitch,
+                            entity,
+                            entity.getId() * 31L + System.currentTimeMillis()
+                    )
             );
         }
         return null;
