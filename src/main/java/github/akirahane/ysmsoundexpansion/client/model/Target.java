@@ -17,7 +17,13 @@ public record Target(YSMSound sound, Conditions conditions) {
 
     public Target(JsonObject jsonObject, YSMSound defaultSound) {
         this(
-                new YSMSound(jsonObject.get("replace_sound").getAsJsonObject(), defaultSound.volume(), defaultSound.pitch()),
+                new YSMSound(
+                        jsonObject.get("replace_sound") != null && !jsonObject.get("replace_sound").isJsonNull()
+                                ? jsonObject.get("replace_sound").getAsJsonObject()
+                                : null,
+                        defaultSound != null ? defaultSound.volume() : 1.0f,
+                        defaultSound != null ? defaultSound.pitch() : 1.0f
+                ),
                 jsonObject.get("conditions") != null ? new Conditions(jsonObject.get("conditions").getAsJsonObject()) : null
         );
     }

@@ -7,15 +7,12 @@ import github.akirahane.ysmsoundexpansion.client.common.YSMSoundInstance;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSound;
 import github.akirahane.ysmsoundexpansion.client.model.YSMSoundConfigModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.Sound;
-import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -159,9 +156,26 @@ public class PlaySoundHandler {
         List<YSMSound> targetSounds = new ArrayList<>();
         for (YSMSoundConfigModel soundConfig : soundConfigs) {
             LOGGER.debug("[YSMSOUND] 检查条件: {} 个", soundConfig.targets().size());
-            targetSounds.addAll(soundConfig.checkConditions(
+            YSMSound targetSound = soundConfig.checkConditions(
                     blockId, blockTags, mainHandItemId, weather, time, dimensionId, health, air, food, xpLevel
-            ));
+            );
+            if (targetSound == null) {
+                continue;
+            }
+            // 判断soundRes.getPath()最后一部分是不是step
+            if (targetSound.sound() == null && soundRes.getPath().endsWith(".step")) {
+                targetSound = new YSMSound(
+                        state.getSoundType(level,pos,entity).getStepSound(),
+                        targetSound.volume(),
+                        targetSound.pitch()
+                );
+            }
+
+            if (targetSound.sound() == null) {
+                continue;
+            }
+
+            targetSounds.add(targetSound);
         }
         // 如果没有符合条件的替换声音, 正常播放
         if (targetSounds.isEmpty()) {
