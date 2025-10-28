@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -60,10 +61,12 @@ public class SoundEngineMixin {
     private void onPlay(SoundInstance p_120313_, CallbackInfo ci) {
         Entity e = tryGetEntityFast(p_120313_);
         if (e instanceof Player || (e != null && e.getType().toString().contains("maid"))) {
-            printSoundInfo(p_120313_);
+//            printSoundInfo(p_120313_);
             SoundEvent soundEvent = PlaySoundHandler.onEntityPlaySound(
                     SoundEvent.createVariableRangeEvent(ResourceLocation.parse(p_120313_.getLocation().toString())),
-                    e, p_120313_.getSource(), 1.0f, 1.0f
+                    e, p_120313_.getSource(),
+                    ObjectUtils.isEmpty(p_120313_.getSound()) ? 1.0f : p_120313_.getVolume(),
+                    ObjectUtils.isEmpty(p_120313_.getSound()) ? 1.0f : p_120313_.getPitch()
             );
             if (soundEvent == null) {
                 LOGGER.debug("取消播放 {}", p_120313_.getLocation());
@@ -74,13 +77,15 @@ public class SoundEngineMixin {
     }
 
     private static void printSoundInfo(SoundInstance sound) {
-        LOGGER.debug("----- {} -----", sound.getClass().getName());
-        LOGGER.debug("ID: {}", sound.getLocation());
-        LOGGER.debug("Pos: ({}, {}, {})%n", sound.getX(), sound.getY(), sound.getZ());
-        LOGGER.debug("Source: {}", sound.getSource());
+        LOGGER.info("----- {} -----", sound.getClass().getName());
+        LOGGER.info("ID: {}", sound.getLocation());
+        LOGGER.info("Pos: ({}, {}, {})%n", sound.getX(), sound.getY(), sound.getZ());
+        LOGGER.info("Source: {}", sound.getSource());
+        LOGGER.info("Volume: {}", ObjectUtils.isEmpty(sound.getSound()) ? "无" : sound.getVolume());
+        LOGGER.info("Pitch: {}", ObjectUtils.isEmpty(sound.getSound()) ? "无" : sound.getPitch());
 
         if (sound instanceof TickableSoundInstance tsi) {
-            LOGGER.debug("Tickable: stopped={}", tsi.isStopped());
+            LOGGER.info("Tickable: stopped={}", tsi.isStopped());
         }
 
         // 反射打印自定义信息
@@ -90,13 +95,13 @@ public class SoundEngineMixin {
                 Object val = f.get(sound);
                 if (val == null) continue;
                 if (val instanceof Entity e)
-                    LOGGER.debug("⚙️ 可能的实体: {} ({})", e.getName().getString(), e.getType().toShortString());
+                    LOGGER.info("⚙️ 可能的实体: {} ({})", e.getName().getString(), e.getType().toShortString());
                 else if (val instanceof BlockPos pos)
-                    LOGGER.debug("\uD83E\uDDF1 可能的方块位置: {}", pos);
+                    LOGGER.info("\uD83E\uDDF1 可能的方块位置: {}", pos);
                 else if (val instanceof Level l)
-                    LOGGER.debug("\uD83C\uDF0D 所在维度: {}", l.dimension().location());
+                    LOGGER.info("\uD83C\uDF0D 所在维度: {}", l.dimension().location());
                 else if (val instanceof String s)
-                    LOGGER.debug("\uD83D\uDCAC 字符串字段: {}={}", f.getName(), s);
+                    LOGGER.info("\uD83D\uDCAC 字符串字段: {}={}", f.getName(), s);
             } catch (Exception ignored) {
             }
         }
