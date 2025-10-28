@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = YSMSoundExpansion.MODID, value = Dist.CLIENT)
 public class PlaySoundHandler {
+    private static boolean isHandling = false;
     private static final HashMap<String, List<Pattern>> modelIdToBlockPatterns = new HashMap<>();
     private static final HashMap<String, List<YSMSoundConfigModel>> modelIdToSoundConfig = new HashMap<>();
     private static final LinkedHashMap<String, List<YSMSoundConfigModel>> modelSoundIdToSoundConfigCache = new LinkedHashMap<>(
@@ -43,15 +44,21 @@ public class PlaySoundHandler {
 
     @SubscribeEvent
     public static void onEntityPlaySound(PlayLevelSoundEvent.AtEntity event) {
-        Entity entity = event.getEntity();
-        Holder<SoundEvent> soundHolder = event.getSound();
+        if (isHandling) return;
+        try {
+            isHandling = true;
+            Entity entity = event.getEntity();
+            Holder<SoundEvent> soundHolder = event.getSound();
 
-        // 取得声音 ID
-        if (soundHolder == null) return;
-        SoundEvent sound = soundHolder.value();
-        sound = onEntityPlaySound(sound, entity, event.getSource(), event.getNewVolume(), event.getNewPitch());
-        if (sound == null) {
-            event.setCanceled(true);
+            // 取得声音 ID
+            if (soundHolder == null) return;
+            SoundEvent sound = soundHolder.value();
+            sound = onEntityPlaySound(sound, entity, event.getSource(), event.getNewVolume(), event.getNewPitch());
+            if (sound == null) {
+                event.setCanceled(true);
+            }
+        } finally {
+            isHandling = false;
         }
     }
 
