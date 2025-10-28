@@ -35,6 +35,7 @@ public record Target(YSMSound sound, Conditions conditions) {
     public boolean checkConditions(
             String blockId,
             List<String> blockTags,
+            String blockType,
             String mainHandItemId,
             String weather,
             int time,
@@ -55,6 +56,10 @@ public record Target(YSMSound sound, Conditions conditions) {
         // 检查Tag
         if (!ObjectUtils.isEmpty(conditions.blockTag()) && blockTags.stream().noneMatch(tag -> conditions.blockTag().matcher(tag).matches())) {
             LOGGER.info("[YSMSOUND_TARGET] 不替换声音: blockTag: {}", blockTags);
+            return false;
+        }
+        if (!ObjectUtils.isEmpty(conditions.blockType()) && !conditions.blockType().matcher(blockType).matches()) {
+            LOGGER.info("[YSMSOUND_TARGET] 不替换声音: blockType: {}", blockType);
             return false;
         }
         if (!ObjectUtils.isEmpty(conditions.itemId()) && (mainHandItemId == null || !conditions.itemId().matcher(mainHandItemId).matches())) {

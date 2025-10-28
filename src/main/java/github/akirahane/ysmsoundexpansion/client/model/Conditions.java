@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public record Conditions(
         Pattern blockId,
         Pattern blockTag,
+        Pattern blockType,
         Pattern itemId,
         List<String> weathers,
         List<IntegerRange> times,
@@ -21,6 +22,7 @@ public record Conditions(
         this(
                 jsonObject.get("block_id") != null ? Pattern.compile(jsonObject.get("block_id").getAsString()) : null,
                 jsonObject.get("block_tag") != null ? Pattern.compile(jsonObject.get("block_tag").getAsString()) : null,
+                jsonObject.get("block_type") != null ? Pattern.compile(jsonObject.get("block_type").getAsString()) : null,
                 jsonObject.get("item_id") != null ? Pattern.compile(jsonObject.get("item_id").getAsString()) : null,
                 jsonObject.get("weathers") != null ? jsonObject.get("weathers").getAsJsonArray().asList()
                         .stream().map(JsonElement::getAsString).collect(Collectors.toList()) : null,

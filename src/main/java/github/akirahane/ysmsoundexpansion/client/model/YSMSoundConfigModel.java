@@ -38,6 +38,7 @@ public record YSMSoundConfigModel(List<Target> targets, List<Pattern> replacePat
     public YSMSound checkConditions(
             String blockId,
             List<String> blockTags,
+            String blockType,
             String mainHandItemId,
             String weather,
             Integer time,
@@ -52,7 +53,8 @@ public record YSMSoundConfigModel(List<Target> targets, List<Pattern> replacePat
         return targets.stream()
                 .filter(target -> target.getSound() != null &&
                         target.checkConditions(
-                                blockId, blockTags, mainHandItemId, weather, time, dimensionId, health, air, food, xpLevel
+                                blockId, blockTags, blockType, mainHandItemId, weather, time, dimensionId, health, air,
+                                food, xpLevel
                         )
                 )
                 .findFirst()

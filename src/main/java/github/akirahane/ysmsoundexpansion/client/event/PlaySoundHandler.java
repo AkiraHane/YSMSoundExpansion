@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -126,6 +127,7 @@ public class PlaySoundHandler {
         List<String> blockTags = state.getBlockHolder().tags().map(
                 tag -> tag.location().toString()
         ).collect(Collectors.toList());
+        SoundType soundType = state.getSoundType(level, pos, entity);
         String mainHandItemId;
         if (entity instanceof LivingEntity living) {
             ItemStack mainHand = living.getMainHandItem();
@@ -157,7 +159,8 @@ public class PlaySoundHandler {
         for (YSMSoundConfigModel soundConfig : soundConfigs) {
             LOGGER.debug("[YSMSOUND] 检查条件: {} 个", soundConfig.targets().size());
             YSMSound targetSound = soundConfig.checkConditions(
-                    blockId, blockTags, mainHandItemId, weather, time, dimensionId, health, air, food, xpLevel
+                    blockId, blockTags, soundType.toString().toUpperCase(Locale.ROOT), mainHandItemId, weather, time,
+                    dimensionId, health, air, food, xpLevel
             );
             if (targetSound == null) {
                 continue;
@@ -165,7 +168,7 @@ public class PlaySoundHandler {
             // 判断soundRes.getPath()最后一部分是不是step
             if (targetSound.sound() == null && soundRes.getPath().endsWith(".step")) {
                 targetSound = new YSMSound(
-                        state.getSoundType(level,pos,entity).getStepSound(),
+                        soundType.getStepSound(),
                         targetSound.volume(),
                         targetSound.pitch()
                 );
